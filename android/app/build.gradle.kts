@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.ro_fin"
+    namespace = "com.rofin.app"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -16,7 +16,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.example.ro_fin"
+        applicationId = "com.rofin.app"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion
@@ -36,6 +36,11 @@ android {
             signingConfig = signingConfigs.getByName("debug")
         }
     }
+}
+
+dependencies {
+    // Required by local_auth for the AppCompat launch theme and biometric prompt.
+    implementation("androidx.appcompat:appcompat:1.7.1")
 }
 
 kotlin {

@@ -1,0 +1,78 @@
+import 'package:material_ui/material_ui.dart';
+
+abstract final class AppIcons {
+  static IconData forKey(String key) {
+    return switch (key) {
+      'person' => Icons.person_outline,
+      'store' => Icons.storefront_outlined,
+      'cash' => Icons.payments_outlined,
+      'bank' => Icons.account_balance_outlined,
+      'wallet' => Icons.account_balance_wallet_outlined,
+      'card' => Icons.credit_card_outlined,
+      'groceries' => Icons.shopping_basket_outlined,
+      'restaurant' => Icons.restaurant_outlined,
+      'car' => Icons.directions_car_outlined,
+      'home' => Icons.home_outlined,
+      'bolt' => Icons.bolt_outlined,
+      'health' => Icons.favorite_border,
+      'school' => Icons.school_outlined,
+      'shopping' => Icons.shopping_bag_outlined,
+      'subscriptions' => Icons.subscriptions_outlined,
+      'family' => Icons.family_restroom_outlined,
+      'charity' => Icons.volunteer_activism_outlined,
+      'more' => Icons.more_horiz,
+      'inventory' => Icons.inventory_2_outlined,
+      'people' => Icons.groups_outlined,
+      'campaign' => Icons.campaign_outlined,
+      'truck' => Icons.local_shipping_outlined,
+      'tools' => Icons.handyman_outlined,
+      'build' => Icons.build_outlined,
+      'tax' => Icons.receipt_long_outlined,
+      'receipt' => Icons.receipt_outlined,
+      'salary' => Icons.payments_outlined,
+      'work' => Icons.work_outline,
+      'gift' => Icons.card_giftcard_outlined,
+      'chart' => Icons.trending_up,
+      'online' => Icons.language_outlined,
+      _ => Icons.category_outlined,
+    };
+  }
+
+  static const List<String> accountKeys = <String>[
+    'cash',
+    'bank',
+    'wallet',
+    'card',
+    'store',
+    'person',
+  ];
+
+  static const List<String> categoryKeys = <String>[
+    'groceries',
+    'restaurant',
+    'car',
+    'home',
+    'bolt',
+    'health',
+    'school',
+    'shopping',
+    'subscriptions',
+    'family',
+    'charity',
+    'inventory',
+    'store',
+    'people',
+    'campaign',
+    'truck',
+    'tools',
+    'build',
+    'tax',
+    'receipt',
+    'salary',
+    'work',
+    'gift',
+    'chart',
+    'online',
+    'more',
+  ];
+}
