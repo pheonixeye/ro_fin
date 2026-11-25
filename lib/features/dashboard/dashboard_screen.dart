@@ -152,7 +152,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 itemCount: balances.length > 6 ? 6 : balances.length,
-                separatorBuilder: (_, __) => const SizedBox(width: 10),
+                separatorBuilder: (_, _) => const SizedBox(width: 10),
                 itemBuilder: (context, index) {
                   final item = balances[index];
                   return _AccountChip(
@@ -845,7 +845,6 @@ class _CategoryBreakdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final maxAmount = totals.isEmpty ? 1 : totals.first.amountMinor;
     return Column(
       children: <Widget>[

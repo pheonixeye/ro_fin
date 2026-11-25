@@ -1,5 +1,4 @@
 {
-  "@@locale": "ar",
   "appName": "روفن",
   "appTagline": "أموالك الشخصية والعملية في مكان واحد خاص.",
   "save": "حفظ",
@@ -61,15 +60,15 @@
   "spent": "المصروف",
   "remaining": "المتبقي",
   "repeatEvery": "يتكرر كل",
+  "recurringEveryWeeks": "{count, plural, =1{كل أسبوع} other{كل {count} أسابيع}}",
+  "recurringEveryMonths": "{count, plural, =1{كل شهر} other{كل {count} أشهر}}",
+  "recurringEveryYears": "{count, plural, =1{كل سنة} other{كل {count} سنوات}}",
+  "postNow": "ترحيل الآن",
+  "postNowMessage": "ستُضاف المعاملة بتاريخ اليوم وسيتم تقديم موعد الاستحقاق التالي.",
+  "recurringPosted": "{count, plural, =1{تم ترحيل معاملة واحدة} other{تم ترحيل {count} معاملات}}",
   "overBudget": "تجاوزت الميزانية",
   "budgetProgress": "تقدم الميزانية",
   "ofBudget": "{spent} من {budget}",
-  "@ofBudget": {
-    "placeholders": {
-      "spent": { "type": "String" },
-      "budget": { "type": "String" }
-    }
-  },
   "personal": "شخصي",
   "business": "العمل",
   "allSpaces": "كل المساحات",
@@ -114,17 +113,7 @@
   "transferShort": "تحويل",
   "searchHint": "ابحث بالملاحظة أو الفئة أو الحساب",
   "resultsCount": "{count} نتيجة",
-  "@resultsCount": {
-    "placeholders": {
-      "count": { "type": "int" }
-    }
-  },
   "transactionsCount": "{count} معاملة",
-  "@transactionsCount": {
-    "placeholders": {
-      "count": { "type": "int" }
-    }
-  },
   "noResults": "لا توجد نتائج",
   "noResultsBody": "جرّب بحثاً آخر أو امسح عوامل التصفية.",
   "addAccount": "إضافة حساب",
@@ -181,20 +170,10 @@
   "deleteBudgetTitle": "حذف الميزانية؟",
   "deleteBudgetMessage": "سجل الإنفاق لن يتأثر. لا يمكن التراجع عن ذلك.",
   "budgetFor": "ميزانية {month}",
-  "@budgetFor": {
-    "placeholders": {
-      "month": { "type": "String" }
-    }
-  },
   "selectMonth": "اختر الشهر",
   "monthlyBudgetHint": "تتجدد الميزانيات كل شهر. يمكنك وضع سقف إجمالي أو سقوف لكل فئة.",
   "budgetAlreadyExists": "توجد ميزانية بالفعل لهذه المساحة وهذا الشهر وهذه الفئة.",
   "budgetsForSpace": "ميزانيات {space}",
-  "@budgetsForSpace": {
-    "placeholders": {
-      "space": { "type": "String" }
-    }
-  },
   "recurringRules": "القواعد المتكررة",
   "addRecurring": "إضافة قاعدة متكررة",
   "editRecurring": "تعديل القاعدة المتكررة",
@@ -229,12 +208,8 @@
   "totalExpenses": "إجمالي المصروفات",
   "netResult": "النتيجة الصافية",
   "reportFor": "تقرير {month}",
-  "@reportFor": {
-    "placeholders": {
-      "month": { "type": "String" }
-    }
-  },
   "exportCsv": "تصدير CSV",
+  "exportCsvHint": "نزّل جدولاً بكل المعاملات للمحاسبة أو التحليل.",
   "csvExported": "تم تصدير CSV",
   "csvExportFailed": "تعذر تصدير CSV",
   "appearance": "المظهر",
@@ -274,11 +249,6 @@
   "dataReset": "تم مسح كل البيانات",
   "aboutRofin": "حول روفن",
   "version": "الإصدار {version}",
-  "@version": {
-    "placeholders": {
-      "version": { "type": "String" }
-    }
-  },
   "privacy": "الخصوصية",
   "privacyHint": "يعمل روفن دون اتصال بالكامل. تبقى بياناتك على هذا الجهاز ومشفرة. لا حساب، لا سحابة، لا تتبع.",
   "madeWith": "صُنع للوظيفة والعمل.",
@@ -300,12 +270,6 @@
   "onboardingNote": "لا تغادر بياناتك هذا الجهاز إلا إذا صدّرت نسخة احتياطية.",
   "onboardingWelcome": "مرحباً بك في روفن",
   "onboardingStepOf": "الخطوة {current} من {total}",
-  "@onboardingStepOf": {
-    "placeholders": {
-      "current": { "type": "int" },
-      "total": { "type": "int" }
-    }
-  },
   "onboardingContinue": "متابعة",
   "onboardingLockTitle": "احمِ روفن",
   "onboardingLockBody": "استخدم قفل جهازك للحفاظ على خصوصية أموالك. يمكنك إيقاف ذلك لاحقاً.",
@@ -337,6 +301,7 @@
   "backupExportFailed": "تعذر تصدير النسخة الاحتياطية",
   "restoreTitle": "استعادة النسخة الاحتياطية؟",
   "restoreMessage": "سيستبدل هذا كل الحسابات والمعاملات والميزانيات والإعدادات على هذا الجهاز.",
+  "restorePasswordPrompt": "أدخل كلمة المرور المستخدمة عند إنشاء هذه النسخة.",
   "restoreSuccess": "تمت استعادة النسخة الاحتياطية",
   "restoreFailed": "تعذر استعادة النسخة الاحتياطية",
   "invalidBackup": "هذا الملف ليس نسخة روفن صالحة.",
@@ -351,11 +316,6 @@
   "import": "استيراد",
   "saving": "جارٍ الحفظ…",
   "savedTo": "تم الحفظ في {path}",
-  "@savedTo": {
-    "placeholders": {
-      "path": { "type": "String" }
-    }
-  },
   "chooseFile": "اختر ملفاً",
   "backupFileType": "نسخة روفن",
   "requiredField": "هذا الحقل مطلوب",

@@ -29,7 +29,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get edit => 'Edit';
 
   @override
+  String get editSpace => 'Edit space';
+
+  @override
   String get add => 'Add';
+
+  @override
+  String get addSpace => 'Add space';
 
   @override
   String get done => 'Done';
@@ -158,6 +164,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get netThisMonth => 'Net this month';
 
   @override
+  String get showAmounts => 'Show amounts';
+
+  @override
+  String get hideAmounts => 'Hide amounts';
+
+  @override
   String get incomeThisMonth => 'Income this month';
 
   @override
@@ -177,6 +189,60 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get remaining => 'Remaining';
+
+  @override
+  String get repeatEvery => 'Repeat every';
+
+  @override
+  String recurringEveryWeeks(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Every $count weeks',
+      one: 'Every week',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String recurringEveryMonths(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Every $count months',
+      one: 'Every month',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String recurringEveryYears(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Every $count years',
+      one: 'Every year',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get postNow => 'Post now';
+
+  @override
+  String get postNowMessage =>
+      'This adds the transaction today and moves the next due date forward.';
+
+  @override
+  String recurringPosted(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Posted $count transactions',
+      one: 'Posted 1 transaction',
+    );
+    return '$_temp0';
+  }
 
   @override
   String get overBudget => 'Over budget';
@@ -200,6 +266,29 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get space => 'Space';
+
+  @override
+  String get spaceKind => 'Space type';
+
+  @override
+  String get spaceKindHint =>
+      'Choose whether this space is for your personal life or your business.';
+
+  @override
+  String get spaceNameAr => 'Space name in Arabic';
+
+  @override
+  String get spaceNameEn => 'Space name in English';
+
+  @override
+  String get spaceSaved => 'Space saved';
+
+  @override
+  String get spaces => 'Spaces';
+
+  @override
+  String get spacesHint =>
+      'Separate your personal life from your business without mixing the numbers.';
 
   @override
   String get addTransaction => 'Add transaction';
@@ -495,6 +584,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Budgets reset every month. You can set one overall limit or limits per category.';
 
   @override
+  String get budgetAlreadyExists =>
+      'A budget already exists for this space, month, and category.';
+
+  @override
   String budgetsForSpace(String space) {
     return 'Budgets for $space';
   }
@@ -609,6 +702,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get exportCsv => 'Export CSV';
+
+  @override
+  String get exportCsvHint =>
+      'Download a spreadsheet of every transaction for accounting or analysis.';
 
   @override
   String get csvExported => 'CSV exported';
@@ -874,11 +971,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get backupPassword => 'Backup password';
 
   @override
+  String get backupPasswordTooShort => 'Use at least 8 characters.';
+
+  @override
   String get backupPasswordHint =>
       'Use at least 8 characters. You will need it to restore.';
 
   @override
   String get backupPasswordConfirm => 'Confirm password';
+
+  @override
+  String get pageNotFound => 'Page not found';
 
   @override
   String get passwordsDoNotMatch => 'Passwords do not match';
@@ -898,6 +1001,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get restoreMessage =>
       'This will replace all accounts, transactions, budgets, and settings on this device.';
+
+  @override
+  String get restorePasswordPrompt =>
+      'Enter the password used when this backup was created.';
 
   @override
   String get restoreSuccess => 'Backup restored';

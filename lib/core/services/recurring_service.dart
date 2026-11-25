@@ -20,8 +20,7 @@ class RecurringService {
     required HiveListRepository<RecurringRule> rules,
     required HiveListRepository<Txn> transactions,
     DateTime? today,
-  }) async {
-    final now = today ?? DateTime.now();
+  }) async {    final now = today ?? DateTime.now();
     final todayKey = dateKey(now);
     var postedCount = 0;
 
@@ -89,6 +88,61 @@ class RecurringService {
     }
 
     return postedCount;
+  }
+
+  /// Posts one transaction for [rule] today and advances its next due date.
+  ///
+  /// This is the manual path for rules with automatic posting turned off.
+  Future<Txn?> postNow({
+    required RecurringRule rule,
+    required HiveListRepository<RecurringRule> rules,
+    required HiveListRepository<Txn> transactions,
+    DateTime? today,
+  }) async {
+    if (rule.accountId.isEmpty ||
+        (rule.type == TxnType.transfer && (rule.toAccountId ?? '').isEmpty)) {
+      return null;
+    }
+
+    final now = today ?? DateTime.now();
+    final todayKey = dateKey(now);
+    final stamp = DateTime.now();
+    final transaction = Txn(
+      id: _uuid.v4(),
+      type: rule.type,
+      amountMinor: rule.amountMinor,
+      dateKey: todayKey,
+      accountId: rule.accountId,
+      categoryId: rule.categoryId,
+      spaceId: rule.spaceId,
+      toAccountId: rule.toAccountId,
+      note: rule.note,
+      recurringId: rule.id,
+      createdAt: stamp,
+      updatedAt: stamp,
+    );
+    await transactions.put(transaction);
+
+    var due = parseDateKey(
+      rule.nextDueDateKey.isEmpty ? rule.startDateKey : rule.nextDueDateKey,
+    );
+    var guard = 0;
+    do {
+      due = _nextDate(rule, due);
+      guard++;
+    } while (dateKey(due).compareTo(todayKey) <= 0 && guard < 60);
+
+    final nextKey = dateKey(due);
+    final expired =
+        rule.endDateKey != null && nextKey.compareTo(rule.endDateKey!) > 0;
+    await rules.put(
+      rule.copyWith(
+        nextDueDateKey: nextKey,
+        isActive: expired ? false : rule.isActive,
+        updatedAt: DateTime.now(),
+      ),
+    );
+    return transaction;
   }
 
   DateTime _nextDate(RecurringRule rule, DateTime due) {

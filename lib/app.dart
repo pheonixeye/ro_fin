@@ -35,7 +35,10 @@ class RofinApp extends ConsumerWidget {
       title: 'Rofin',
       locale: Locale(settings.locale),
       supportedLocales: AppLocalizations.supportedLocales,
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+        AppLocalizations.delegate,
+        ...GlobalMaterialLocalizations.delegates,
+      ],
       theme: AppTheme.light(settings.locale),
       darkTheme: AppTheme.dark(settings.locale),
       themeMode: themeMode,

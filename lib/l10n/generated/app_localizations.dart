@@ -134,11 +134,23 @@ abstract class AppLocalizations {
   /// **'Edit'**
   String get edit;
 
+  /// No description provided for @editSpace.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit space'**
+  String get editSpace;
+
   /// No description provided for @add.
   ///
   /// In en, this message translates to:
   /// **'Add'**
   String get add;
+
+  /// No description provided for @addSpace.
+  ///
+  /// In en, this message translates to:
+  /// **'Add space'**
+  String get addSpace;
 
   /// No description provided for @done.
   ///
@@ -392,6 +404,18 @@ abstract class AppLocalizations {
   /// **'Net this month'**
   String get netThisMonth;
 
+  /// No description provided for @showAmounts.
+  ///
+  /// In en, this message translates to:
+  /// **'Show amounts'**
+  String get showAmounts;
+
+  /// No description provided for @hideAmounts.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide amounts'**
+  String get hideAmounts;
+
   /// No description provided for @incomeThisMonth.
   ///
   /// In en, this message translates to:
@@ -434,6 +458,48 @@ abstract class AppLocalizations {
   /// **'Remaining'**
   String get remaining;
 
+  /// No description provided for @repeatEvery.
+  ///
+  /// In en, this message translates to:
+  /// **'Repeat every'**
+  String get repeatEvery;
+
+  /// No description provided for @recurringEveryWeeks.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Every week} other{Every {count} weeks}}'**
+  String recurringEveryWeeks(int count);
+
+  /// No description provided for @recurringEveryMonths.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Every month} other{Every {count} months}}'**
+  String recurringEveryMonths(int count);
+
+  /// No description provided for @recurringEveryYears.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Every year} other{Every {count} years}}'**
+  String recurringEveryYears(int count);
+
+  /// No description provided for @postNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Post now'**
+  String get postNow;
+
+  /// No description provided for @postNowMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This adds the transaction today and moves the next due date forward.'**
+  String get postNowMessage;
+
+  /// No description provided for @recurringPosted.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Posted 1 transaction} other{Posted {count} transactions}}'**
+  String recurringPosted(int count);
+
   /// No description provided for @overBudget.
   ///
   /// In en, this message translates to:
@@ -475,6 +541,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Space'**
   String get space;
+
+  /// No description provided for @spaceKind.
+  ///
+  /// In en, this message translates to:
+  /// **'Space type'**
+  String get spaceKind;
+
+  /// No description provided for @spaceKindHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose whether this space is for your personal life or your business.'**
+  String get spaceKindHint;
+
+  /// No description provided for @spaceNameAr.
+  ///
+  /// In en, this message translates to:
+  /// **'Space name in Arabic'**
+  String get spaceNameAr;
+
+  /// No description provided for @spaceNameEn.
+  ///
+  /// In en, this message translates to:
+  /// **'Space name in English'**
+  String get spaceNameEn;
+
+  /// No description provided for @spaceSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Space saved'**
+  String get spaceSaved;
+
+  /// No description provided for @spaces.
+  ///
+  /// In en, this message translates to:
+  /// **'Spaces'**
+  String get spaces;
+
+  /// No description provided for @spacesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Separate your personal life from your business without mixing the numbers.'**
+  String get spacesHint;
 
   /// No description provided for @addTransaction.
   ///
@@ -1028,6 +1136,12 @@ abstract class AppLocalizations {
   /// **'Budgets reset every month. You can set one overall limit or limits per category.'**
   String get monthlyBudgetHint;
 
+  /// No description provided for @budgetAlreadyExists.
+  ///
+  /// In en, this message translates to:
+  /// **'A budget already exists for this space, month, and category.'**
+  String get budgetAlreadyExists;
+
   /// No description provided for @budgetsForSpace.
   ///
   /// In en, this message translates to:
@@ -1243,6 +1357,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Export CSV'**
   String get exportCsv;
+
+  /// No description provided for @exportCsvHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Download a spreadsheet of every transaction for accounting or analysis.'**
+  String get exportCsvHint;
 
   /// No description provided for @csvExported.
   ///
@@ -1730,6 +1850,12 @@ abstract class AppLocalizations {
   /// **'Backup password'**
   String get backupPassword;
 
+  /// No description provided for @backupPasswordTooShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Use at least 8 characters.'**
+  String get backupPasswordTooShort;
+
   /// No description provided for @backupPasswordHint.
   ///
   /// In en, this message translates to:
@@ -1741,6 +1867,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Confirm password'**
   String get backupPasswordConfirm;
+
+  /// No description provided for @pageNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Page not found'**
+  String get pageNotFound;
 
   /// No description provided for @passwordsDoNotMatch.
   ///
@@ -1777,6 +1909,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This will replace all accounts, transactions, budgets, and settings on this device.'**
   String get restoreMessage;
+
+  /// No description provided for @restorePasswordPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the password used when this backup was created.'**
+  String get restorePasswordPrompt;
 
   /// No description provided for @restoreSuccess.
   ///

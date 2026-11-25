@@ -202,7 +202,7 @@ class SheetScaffold extends StatelessWidget {
                   style: theme.textTheme.titleLarge,
                 ),
               ),
-              if (trailing != null) trailing!,
+              ?trailing,
             ],
           ),
           const SizedBox(height: 16),

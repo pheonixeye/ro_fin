@@ -61,6 +61,40 @@
   "spent": "Spent",
   "remaining": "Remaining",
   "repeatEvery": "Repeat every",
+  "recurringEveryWeeks": "{count, plural, =1{Every week} other{Every {count} weeks}}",
+  "@recurringEveryWeeks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "recurringEveryMonths": "{count, plural, =1{Every month} other{Every {count} months}}",
+  "@recurringEveryMonths": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "recurringEveryYears": "{count, plural, =1{Every year} other{Every {count} years}}",
+  "@recurringEveryYears": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "postNow": "Post now",
+  "postNowMessage": "This adds the transaction today and moves the next due date forward.",
+  "recurringPosted": "{count, plural, =1{Posted 1 transaction} other{Posted {count} transactions}}",
+  "@recurringPosted": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "overBudget": "Over budget",
   "budgetProgress": "Budget progress",
   "ofBudget": "{spent} of {budget}",
@@ -235,6 +269,7 @@
     }
   },
   "exportCsv": "Export CSV",
+  "exportCsvHint": "Download a spreadsheet of every transaction for accounting or analysis.",
   "csvExported": "CSV exported",
   "csvExportFailed": "Could not export CSV",
   "appearance": "Appearance",
@@ -337,6 +372,7 @@
   "backupExportFailed": "Could not export backup",
   "restoreTitle": "Restore backup?",
   "restoreMessage": "This will replace all accounts, transactions, budgets, and settings on this device.",
+  "restorePasswordPrompt": "Enter the password used when this backup was created.",
   "restoreSuccess": "Backup restored",
   "restoreFailed": "Could not restore backup",
   "invalidBackup": "This file is not a valid Rofin backup.",

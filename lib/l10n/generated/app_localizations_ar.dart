@@ -28,7 +28,13 @@ class AppLocalizationsAr extends AppLocalizations {
   String get edit => 'تعديل';
 
   @override
+  String get editSpace => 'تعديل المساحة';
+
+  @override
   String get add => 'إضافة';
+
+  @override
+  String get addSpace => 'إضافة مساحة';
 
   @override
   String get done => 'تم';
@@ -157,6 +163,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get netThisMonth => 'صافي هذا الشهر';
 
   @override
+  String get showAmounts => 'إظهار المبالغ';
+
+  @override
+  String get hideAmounts => 'إخفاء المبالغ';
+
+  @override
   String get incomeThisMonth => 'دخل هذا الشهر';
 
   @override
@@ -176,6 +188,60 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get remaining => 'المتبقي';
+
+  @override
+  String get repeatEvery => 'يتكرر كل';
+
+  @override
+  String recurringEveryWeeks(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'كل $count أسابيع',
+      one: 'كل أسبوع',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String recurringEveryMonths(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'كل $count أشهر',
+      one: 'كل شهر',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String recurringEveryYears(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'كل $count سنوات',
+      one: 'كل سنة',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get postNow => 'ترحيل الآن';
+
+  @override
+  String get postNowMessage =>
+      'ستُضاف المعاملة بتاريخ اليوم وسيتم تقديم موعد الاستحقاق التالي.';
+
+  @override
+  String recurringPosted(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'تم ترحيل $count معاملات',
+      one: 'تم ترحيل معاملة واحدة',
+    );
+    return '$_temp0';
+  }
 
   @override
   String get overBudget => 'تجاوزت الميزانية';
@@ -199,6 +265,28 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get space => 'المساحة';
+
+  @override
+  String get spaceKind => 'نوع المساحة';
+
+  @override
+  String get spaceKindHint =>
+      'اختر ما إذا كانت هذه المساحة لحياتك الشخصية أم لعملك.';
+
+  @override
+  String get spaceNameAr => 'اسم المساحة بالعربية';
+
+  @override
+  String get spaceNameEn => 'اسم المساحة بالإنجليزية';
+
+  @override
+  String get spaceSaved => 'تم حفظ المساحة';
+
+  @override
+  String get spaces => 'المساحات';
+
+  @override
+  String get spacesHint => 'افصل حياتك الشخصية عن عملك دون خلط الأرقام.';
 
   @override
   String get addTransaction => 'إضافة معاملة';
@@ -492,6 +580,10 @@ class AppLocalizationsAr extends AppLocalizations {
       'تتجدد الميزانيات كل شهر. يمكنك وضع سقف إجمالي أو سقوف لكل فئة.';
 
   @override
+  String get budgetAlreadyExists =>
+      'توجد ميزانية بالفعل لهذه المساحة وهذا الشهر وهذه الفئة.';
+
+  @override
   String budgetsForSpace(String space) {
     return 'ميزانيات $space';
   }
@@ -605,6 +697,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get exportCsv => 'تصدير CSV';
+
+  @override
+  String get exportCsvHint => 'نزّل جدولاً بكل المعاملات للمحاسبة أو التحليل.';
 
   @override
   String get csvExported => 'تم تصدير CSV';
@@ -868,11 +963,17 @@ class AppLocalizationsAr extends AppLocalizations {
   String get backupPassword => 'كلمة مرور النسخة';
 
   @override
+  String get backupPasswordTooShort => 'استخدم 8 أحرف على الأقل.';
+
+  @override
   String get backupPasswordHint =>
       'استخدم 8 أحرف على الأقل. ستحتاجها للاستعادة.';
 
   @override
   String get backupPasswordConfirm => 'تأكيد كلمة المرور';
+
+  @override
+  String get pageNotFound => 'الصفحة غير موجودة';
 
   @override
   String get passwordsDoNotMatch => 'كلمتا المرور غير متطابقتين';
@@ -892,6 +993,10 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get restoreMessage =>
       'سيستبدل هذا كل الحسابات والمعاملات والميزانيات والإعدادات على هذا الجهاز.';
+
+  @override
+  String get restorePasswordPrompt =>
+      'أدخل كلمة المرور المستخدمة عند إنشاء هذه النسخة.';
 
   @override
   String get restoreSuccess => 'تمت استعادة النسخة الاحتياطية';
