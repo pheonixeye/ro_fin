@@ -5,7 +5,7 @@ import 'package:vm_service/vm_service_io.dart';
 
 /// Development helper: evaluates an expression in the running debug app.
 ///
-/// Usage: dart run tool/vm_eval.dart <vm-service-http-url> <library-uri> [expr]
+/// Usage: `dart run tool/vm_eval.dart <vm-service-http-url> <library-uri> [expr]`
 Future<void> main(List<String> args) async {
   if (args.length < 2) {
     stderr.writeln(
@@ -55,7 +55,7 @@ Future<void> main(List<String> args) async {
           stderr.writeln(result.json?['exception']?.toString());
           exitCode = 1;
         } else {
-          print('OK: ${result.json}');
+          stdout.writeln('OK: ${result.json}');
         }
         return;
       }

@@ -1123,4 +1123,96 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get backToDashboard => 'Back to dashboard';
+
+  @override
+  String get archiveSpace => 'Archive space';
+
+  @override
+  String get unarchiveSpace => 'Restore space';
+
+  @override
+  String get spaceArchived => 'Space archived';
+
+  @override
+  String get spaceRestored => 'Space restored';
+
+  @override
+  String get deleteSpaceTitle => 'Delete space?';
+
+  @override
+  String get deleteSpaceMessage =>
+      'The space will be removed. Transactions, budgets, and recurring rules in it keep their history but will no longer belong to a space. Consider archiving instead.';
+
+  @override
+  String get spaceDeleted => 'Space deleted';
+
+  @override
+  String get spaceInUseTitle => 'Space is still in use';
+
+  @override
+  String spaceInUseMessage(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          '$count records use this space. Archive it instead to keep your history tidy.',
+      one: 'One record uses this space. Archive it instead to keep your history tidy.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get lastSpaceRequired => 'Keep at least one active space.';
+
+  @override
+  String get spaceSystemProtected =>
+      'Built-in spaces can be archived but not deleted.';
+
+  @override
+  String get archiveCategory => 'Archive category';
+
+  @override
+  String get unarchiveCategory => 'Restore category';
+
+  @override
+  String get categoryArchived => 'Category archived';
+
+  @override
+  String get categoryRestored => 'Category restored';
+
+  @override
+  String get deleteCategoryInUseTitle => 'Category is still in use';
+
+  @override
+  String deleteCategoryInUseMessage(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          '$count records use this category. Archive it instead so past entries stay labeled.',
+      one: 'One record uses this category. Archive it instead so past entries stay labeled.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get accountArchived => 'Account archived';
+
+  @override
+  String get deleteAccountInUseTitle => 'Account is still in use';
+
+  @override
+  String deleteAccountInUseMessage(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          '$count records use this account. Archive it instead to keep your history intact.',
+      one: 'One record uses this account. Archive it instead to keep your history intact.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get licenses => 'Open source licenses';
 }

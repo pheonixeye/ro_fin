@@ -5,6 +5,7 @@ import 'package:uuid/uuid.dart';
 import '../../core/models/enums.dart';
 import '../../core/models/space.dart';
 import '../../core/providers/app_providers.dart';
+import '../../core/services/reference_service.dart';
 import '../../core/theme/app_icons.dart';
 import '../../core/utils/l10n.dart';
 import '../../core/widgets/category_avatar.dart';
@@ -22,12 +23,100 @@ class SpacesScreen extends ConsumerWidget {
     );
   }
 
+  Future<void> _toggleArchive(
+    BuildContext context,
+    WidgetRef ref,
+    Space space,
+  ) async {
+    final l10n = context.l10n;
+    final spaces = ref.read(spacesProvider).value ?? const <Space>[];
+    final archiving = !space.archived;
+    if (archiving &&
+        spaces.where((item) => !item.archived).length <= 1) {
+      showAppSnack(context, l10n.lastSpaceRequired);
+      return;
+    }
+    await ref
+        .read(spacesRepositoryProvider)
+        .put(space.copyWith(archived: archiving));
+    if (archiving &&
+        ref.read(settingsProvider).activeSpaceId == space.id) {
+      await ref.read(settingsProvider.notifier).setActiveSpace('all');
+    }
+    if (context.mounted) {
+      showAppSnack(
+        context,
+        archiving ? l10n.spaceArchived : l10n.spaceRestored,
+      );
+    }
+  }
+
+  Future<void> _delete(
+    BuildContext context,
+    WidgetRef ref,
+    Space space,
+  ) async {
+    final l10n = context.l10n;
+    if (space.isSystem) {
+      showAppSnack(context, l10n.spaceSystemProtected);
+      return;
+    }
+    final spaces = ref.read(spacesProvider).value ?? const <Space>[];
+    if (!space.archived &&
+        spaces.where((item) => !item.archived).length <= 1) {
+      showAppSnack(context, l10n.lastSpaceRequired);
+      return;
+    }
+
+    final counts = ReferenceService.forSpace(
+      spaceId: space.id,
+      transactions: ref.read(transactionsProvider).value ?? const [],
+      budgets: ref.read(budgetsProvider).value ?? const [],
+      recurring: ref.read(recurringProvider).value ?? const [],
+    );
+    if (counts.isUsed) {
+      final archive = await showConfirmDialog(
+        context,
+        title: l10n.spaceInUseTitle,
+        message: l10n.spaceInUseMessage(counts.total),
+        confirmLabel: l10n.archiveSpace,
+        destructive: false,
+      );
+      if (archive && context.mounted) {
+        await _toggleArchive(context, ref, space);
+      }
+      return;
+    }
+
+    final confirmed = await showConfirmDialog(
+      context,
+      title: l10n.deleteSpaceTitle,
+      message: l10n.deleteSpaceMessage,
+      confirmLabel: l10n.delete,
+    );
+    if (!confirmed || !context.mounted) {
+      return;
+    }
+    await ref.read(spacesRepositoryProvider).delete(space.id);
+    if (ref.read(settingsProvider).activeSpaceId == space.id) {
+      await ref.read(settingsProvider.notifier).setActiveSpace('all');
+    }
+    if (context.mounted) {
+      showAppSnack(context, l10n.spaceDeleted);
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
     final locale = context.localeCode;
     final theme = Theme.of(context);
     final spaces = ref.watch(sortedSpacesProvider);
+    final allSpaces = ref.watch(spacesProvider).value ?? const <Space>[];
+    final archivedSpaces = allSpaces
+        .where((space) => space.archived)
+        .toList(growable: false)
+      ..sort((a, b) => a.sortOrder.compareTo(b.sortOrder));
     final transactions = ref.watch(transactionsProvider).value ?? const [];
     final budgets = ref.watch(budgetsProvider).value ?? const [];
 
@@ -76,80 +165,201 @@ class SpacesScreen extends ConsumerWidget {
           ),
           const SizedBox(height: 18),
           for (final space in spaces) ...<Widget>[
-            Card(
-              child: InkWell(
-                borderRadius: BorderRadius.circular(22),
-                onTap: () => _openEditor(context, space: space),
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(14, 14, 12, 14),
-                  child: Row(
-                    children: <Widget>[
-                      CategoryAvatar(
-                        iconKey: space.iconKey,
-                        colorValue: space.color,
-                        size: 48,
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              space.localizedName(locale),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: theme.textTheme.titleSmall,
-                            ),
-                            const SizedBox(height: 4),
-                            Wrap(
-                              spacing: 6,
-                              runSpacing: 4,
-                              crossAxisAlignment: WrapCrossAlignment.center,
-                              children: <Widget>[
-                                TypeBadge(
-                                  label: space.kind == SpaceKind.business
-                                      ? l10n.business
-                                      : l10n.personal,
-                                  color: Color(space.color),
-                                ),
-                                Text(
-                                  l10n.transactionsCount(
-                                    transactions
-                                        .where(
-                                          (txn) => txn.spaceId == space.id,
-                                        )
-                                        .length,
-                                  ),
-                                  style: theme.textTheme.labelSmall?.copyWith(
-                                    color: theme.colorScheme.onSurfaceVariant,
-                                  ),
-                                ),
-                                if (budgets.any(
-                                  (budget) => budget.spaceId == space.id,
-                                ))
-                                  Text(
-                                    '· ${l10n.budgets}',
-                                    style: theme.textTheme.labelSmall?.copyWith(
-                                      color: theme.colorScheme.onSurfaceVariant,
-                                    ),
-                                  ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      Icon(
-                        Icons.chevron_right,
-                        color: theme.colorScheme.onSurfaceVariant,
-                      ),
-                    ],
-                  ),
-                ),
+            _SpaceTile(
+              space: space,
+              locale: locale,
+              transactionCount: transactions
+                  .where((txn) => txn.spaceId == space.id)
+                  .length,
+              hasBudgets: budgets.any(
+                (budget) => budget.spaceId == space.id,
               ),
+              onEdit: () => _openEditor(context, space: space),
+              onArchive: () => _toggleArchive(context, ref, space),
+              onDelete: () => _delete(context, ref, space),
             ),
             const SizedBox(height: 10),
           ],
+          if (archivedSpaces.isNotEmpty) ...<Widget>[
+            const SizedBox(height: 14),
+            SectionTitle(title: l10n.archived),
+            for (final space in archivedSpaces) ...<Widget>[
+              _SpaceTile(
+                space: space,
+                locale: locale,
+                transactionCount: transactions
+                    .where((txn) => txn.spaceId == space.id)
+                    .length,
+                hasBudgets: budgets.any(
+                  (budget) => budget.spaceId == space.id,
+                ),
+                onEdit: () => _openEditor(context, space: space),
+                onArchive: () => _toggleArchive(context, ref, space),
+                onDelete: () => _delete(context, ref, space),
+              ),
+              const SizedBox(height: 10),
+            ],
+          ],
         ],
+      ),
+    );
+  }
+}
+
+class _SpaceTile extends StatelessWidget {
+  const _SpaceTile({
+    required this.space,
+    required this.locale,
+    required this.transactionCount,
+    required this.hasBudgets,
+    required this.onEdit,
+    required this.onArchive,
+    required this.onDelete,
+  });
+
+  final Space space;
+  final String locale;
+  final int transactionCount;
+  final bool hasBudgets;
+  final VoidCallback onEdit;
+  final VoidCallback onArchive;
+  final VoidCallback onDelete;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final theme = Theme.of(context);
+    return Card(
+      child: InkWell(
+        borderRadius: BorderRadius.circular(22),
+        onTap: onEdit,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(14, 14, 4, 14),
+          child: Row(
+            children: <Widget>[
+              CategoryAvatar(
+                iconKey: space.iconKey,
+                colorValue: space.color,
+                size: 48,
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        Flexible(
+                          child: Text(
+                            space.localizedName(locale),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: theme.textTheme.titleSmall,
+                          ),
+                        ),
+                        if (space.archived) ...<Widget>[
+                          const SizedBox(width: 6),
+                          TypeBadge(
+                            label: l10n.archived,
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                        ],
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    Wrap(
+                      spacing: 6,
+                      runSpacing: 4,
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      children: <Widget>[
+                        TypeBadge(
+                          label: space.kind == SpaceKind.business
+                              ? l10n.business
+                              : l10n.personal,
+                          color: Color(space.color),
+                        ),
+                        Text(
+                          l10n.transactionsCount(transactionCount),
+                          style: theme.textTheme.labelSmall?.copyWith(
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                        if (hasBudgets)
+                          Text(
+                            '· ${l10n.budgets}',
+                            style: theme.textTheme.labelSmall?.copyWith(
+                              color: theme.colorScheme.onSurfaceVariant,
+                            ),
+                          ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              PopupMenuButton<String>(
+                tooltip: l10n.edit,
+                icon: Icon(
+                  Icons.more_vert,
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
+                onSelected: (value) {
+                  switch (value) {
+                    case 'edit':
+                      onEdit();
+                      break;
+                    case 'archive':
+                      onArchive();
+                      break;
+                    case 'delete':
+                      onDelete();
+                      break;
+                  }
+                },
+                itemBuilder: (context) => <PopupMenuEntry<String>>[
+                  PopupMenuItem<String>(
+                    value: 'edit',
+                    child: ListTile(
+                      leading: const Icon(Icons.edit_outlined),
+                      title: Text(l10n.edit),
+                      contentPadding: EdgeInsets.zero,
+                    ),
+                  ),
+                  PopupMenuItem<String>(
+                    value: 'archive',
+                    child: ListTile(
+                      leading: Icon(
+                        space.archived
+                            ? Icons.unarchive_outlined
+                            : Icons.archive_outlined,
+                      ),
+                      title: Text(
+                        space.archived
+                            ? l10n.unarchiveSpace
+                            : l10n.archiveSpace,
+                      ),
+                      contentPadding: EdgeInsets.zero,
+                    ),
+                  ),
+                  if (!space.isSystem)
+                    PopupMenuItem<String>(
+                      value: 'delete',
+                      child: ListTile(
+                        leading: Icon(
+                          Icons.delete_outline,
+                          color: theme.colorScheme.error,
+                        ),
+                        title: Text(
+                          l10n.delete,
+                          style: TextStyle(color: theme.colorScheme.error),
+                        ),
+                        contentPadding: EdgeInsets.zero,
+                      ),
+                    ),
+                ],
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

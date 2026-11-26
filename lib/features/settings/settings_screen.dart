@@ -648,6 +648,17 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   onTap: _showAbout,
                 ),
                 _divider(theme),
+                ListTile(
+                  leading: const Icon(Icons.description_outlined),
+                  title: Text(l10n.licenses),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => showLicensePage(
+                    context: context,
+                    applicationName: l10n.appName,
+                    applicationVersion: _version,
+                  ),
+                ),
+                _divider(theme),
                 Padding(
                   padding: const EdgeInsets.all(16),
                   child: Row(

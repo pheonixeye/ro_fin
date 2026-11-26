@@ -100,8 +100,12 @@
   "ofBudget": "{spent} of {budget}",
   "@ofBudget": {
     "placeholders": {
-      "spent": { "type": "String" },
-      "budget": { "type": "String" }
+      "spent": {
+        "type": "String"
+      },
+      "budget": {
+        "type": "String"
+      }
     }
   },
   "personal": "Personal",
@@ -150,13 +154,17 @@
   "resultsCount": "{count} results",
   "@resultsCount": {
     "placeholders": {
-      "count": { "type": "int" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "transactionsCount": "{count} transactions",
   "@transactionsCount": {
     "placeholders": {
-      "count": { "type": "int" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "noResults": "No matches",
@@ -217,7 +225,9 @@
   "budgetFor": "Budget for {month}",
   "@budgetFor": {
     "placeholders": {
-      "month": { "type": "String" }
+      "month": {
+        "type": "String"
+      }
     }
   },
   "selectMonth": "Select month",
@@ -226,7 +236,9 @@
   "budgetsForSpace": "Budgets for {space}",
   "@budgetsForSpace": {
     "placeholders": {
-      "space": { "type": "String" }
+      "space": {
+        "type": "String"
+      }
     }
   },
   "recurringRules": "Recurring rules",
@@ -265,7 +277,9 @@
   "reportFor": "Report for {month}",
   "@reportFor": {
     "placeholders": {
-      "month": { "type": "String" }
+      "month": {
+        "type": "String"
+      }
     }
   },
   "exportCsv": "Export CSV",
@@ -311,7 +325,9 @@
   "version": "Version {version}",
   "@version": {
     "placeholders": {
-      "version": { "type": "String" }
+      "version": {
+        "type": "String"
+      }
     }
   },
   "privacy": "Privacy",
@@ -337,8 +353,12 @@
   "onboardingStepOf": "Step {current} of {total}",
   "@onboardingStepOf": {
     "placeholders": {
-      "current": { "type": "int" },
-      "total": { "type": "int" }
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
     }
   },
   "onboardingContinue": "Continue",
@@ -389,7 +409,9 @@
   "savedTo": "Saved to {path}",
   "@savedTo": {
     "placeholders": {
-      "path": { "type": "String" }
+      "path": {
+        "type": "String"
+      }
     }
   },
   "chooseFile": "Choose file",
@@ -415,5 +437,47 @@
   "month": "Month",
   "ownerDrawHint": "Owner draws are transfers, not expenses.",
   "unlockWithDevice": "Unlock with device",
-  "backToDashboard": "Back to dashboard"
+  "backToDashboard": "Back to dashboard",
+  "archiveSpace": "Archive space",
+  "unarchiveSpace": "Restore space",
+  "spaceArchived": "Space archived",
+  "spaceRestored": "Space restored",
+  "deleteSpaceTitle": "Delete space?",
+  "deleteSpaceMessage": "The space will be removed. Transactions, budgets, and recurring rules in it keep their history but will no longer belong to a space. Consider archiving instead.",
+  "spaceDeleted": "Space deleted",
+  "spaceInUseTitle": "Space is still in use",
+  "spaceInUseMessage": "{count, plural, =1{One record uses this space. Archive it instead to keep your history tidy.} other{{count} records use this space. Archive it instead to keep your history tidy.}}",
+  "lastSpaceRequired": "Keep at least one active space.",
+  "spaceSystemProtected": "Built-in spaces can be archived but not deleted.",
+  "archiveCategory": "Archive category",
+  "unarchiveCategory": "Restore category",
+  "categoryArchived": "Category archived",
+  "categoryRestored": "Category restored",
+  "deleteCategoryInUseTitle": "Category is still in use",
+  "deleteCategoryInUseMessage": "{count, plural, =1{One record uses this category. Archive it instead so past entries stay labeled.} other{{count} records use this category. Archive it instead so past entries stay labeled.}}",
+  "accountArchived": "Account archived",
+  "deleteAccountInUseTitle": "Account is still in use",
+  "deleteAccountInUseMessage": "{count, plural, =1{One record uses this account. Archive it instead to keep your history intact.} other{{count} records use this account. Archive it instead to keep your history intact.}}",
+  "licenses": "Open source licenses",
+  "@spaceInUseMessage": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@deleteCategoryInUseMessage": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@deleteAccountInUseMessage": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

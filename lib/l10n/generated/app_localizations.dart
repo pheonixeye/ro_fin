@@ -2143,6 +2143,132 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Back to dashboard'**
   String get backToDashboard;
+
+  /// No description provided for @archiveSpace.
+  ///
+  /// In en, this message translates to:
+  /// **'Archive space'**
+  String get archiveSpace;
+
+  /// No description provided for @unarchiveSpace.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore space'**
+  String get unarchiveSpace;
+
+  /// No description provided for @spaceArchived.
+  ///
+  /// In en, this message translates to:
+  /// **'Space archived'**
+  String get spaceArchived;
+
+  /// No description provided for @spaceRestored.
+  ///
+  /// In en, this message translates to:
+  /// **'Space restored'**
+  String get spaceRestored;
+
+  /// No description provided for @deleteSpaceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete space?'**
+  String get deleteSpaceTitle;
+
+  /// No description provided for @deleteSpaceMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'The space will be removed. Transactions, budgets, and recurring rules in it keep their history but will no longer belong to a space. Consider archiving instead.'**
+  String get deleteSpaceMessage;
+
+  /// No description provided for @spaceDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Space deleted'**
+  String get spaceDeleted;
+
+  /// No description provided for @spaceInUseTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Space is still in use'**
+  String get spaceInUseTitle;
+
+  /// No description provided for @spaceInUseMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{One record uses this space. Archive it instead to keep your history tidy.} other{{count} records use this space. Archive it instead to keep your history tidy.}}'**
+  String spaceInUseMessage(int count);
+
+  /// No description provided for @lastSpaceRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep at least one active space.'**
+  String get lastSpaceRequired;
+
+  /// No description provided for @spaceSystemProtected.
+  ///
+  /// In en, this message translates to:
+  /// **'Built-in spaces can be archived but not deleted.'**
+  String get spaceSystemProtected;
+
+  /// No description provided for @archiveCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Archive category'**
+  String get archiveCategory;
+
+  /// No description provided for @unarchiveCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore category'**
+  String get unarchiveCategory;
+
+  /// No description provided for @categoryArchived.
+  ///
+  /// In en, this message translates to:
+  /// **'Category archived'**
+  String get categoryArchived;
+
+  /// No description provided for @categoryRestored.
+  ///
+  /// In en, this message translates to:
+  /// **'Category restored'**
+  String get categoryRestored;
+
+  /// No description provided for @deleteCategoryInUseTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Category is still in use'**
+  String get deleteCategoryInUseTitle;
+
+  /// No description provided for @deleteCategoryInUseMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{One record uses this category. Archive it instead so past entries stay labeled.} other{{count} records use this category. Archive it instead so past entries stay labeled.}}'**
+  String deleteCategoryInUseMessage(int count);
+
+  /// No description provided for @accountArchived.
+  ///
+  /// In en, this message translates to:
+  /// **'Account archived'**
+  String get accountArchived;
+
+  /// No description provided for @deleteAccountInUseTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Account is still in use'**
+  String get deleteAccountInUseTitle;
+
+  /// No description provided for @deleteAccountInUseMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{One record uses this account. Archive it instead to keep your history intact.} other{{count} records use this account. Archive it instead to keep your history intact.}}'**
+  String deleteAccountInUseMessage(int count);
+
+  /// No description provided for @licenses.
+  ///
+  /// In en, this message translates to:
+  /// **'Open source licenses'**
+  String get licenses;
 }
 
 class _AppLocalizationsDelegate

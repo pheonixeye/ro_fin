@@ -205,7 +205,20 @@ final currencyCodeProvider = Provider<String>((ref) {
 });
 
 final activeSpaceIdProvider = Provider<String>((ref) {
-  return ref.watch(settingsProvider.select((settings) => settings.activeSpaceId));
+  final selected = ref.watch(
+    settingsProvider.select((settings) => settings.activeSpaceId),
+  );
+  if (selected == 'all') {
+    return 'all';
+  }
+  final spaces = ref.watch(spacesProvider).value;
+  if (spaces == null) {
+    return selected;
+  }
+  final exists = spaces.any(
+    (space) => space.id == selected && !space.archived,
+  );
+  return exists ? selected : 'all';
 });
 
 final spacesProvider = StreamProvider<List<Space>>((ref) {

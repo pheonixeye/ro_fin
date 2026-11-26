@@ -15,7 +15,7 @@ dependencies:
 
   # Flutter 3.50 ships Material and Cupertino as standalone packages.
   material_ui: ^1.11.1
-  cupertino_icons: ^1.0.9
+  cupertino_icons: ^2.0.0
 
   # State and navigation
   flutter_riverpod: ^3.5.0
@@ -45,9 +45,8 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  integration_test:
-    sdk: flutter
   flutter_lints: ^6.0.0
+  vm_service: ^15.4.0
 
 flutter:
   uses-material-design: true
@@ -55,6 +54,7 @@ flutter:
 
   assets:
     - assets/fonts/
+    - assets/icon/
 
   fonts:
     - family: IBMPlexSansArabic

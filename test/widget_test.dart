@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:rofin/core/providers/app_providers.dart';
 import 'package:rofin/core/widgets/money_text.dart';
+import 'package:rofin/main.dart';
 
 Widget _wrap(Widget child) {
   return ProviderScope(
@@ -66,5 +67,32 @@ void main() {
     final text = _textOf(tester);
     expect(text, startsWith('−'));
     expect(text, contains('50.00'));
+  });
+
+  testWidgets('startup error screen offers a confirmed reset', (
+    WidgetTester tester,
+  ) async {
+    var resetCalled = false;
+    await tester.pumpWidget(
+      StartupErrorApp(
+        error: 'HiveError: bad key',
+        onReset: () => resetCalled = true,
+      ),
+    );
+
+    expect(
+      find.text('Rofin could not open its encrypted database'),
+      findsOneWidget,
+    );
+    expect(find.text('Reset local data'), findsOneWidget);
+
+    await tester.tap(find.text('Reset local data'));
+    await tester.pumpAndSettle();
+    expect(find.text('Reset local data?'), findsOneWidget);
+    expect(resetCalled, isFalse);
+
+    await tester.tap(find.text('Delete and reset'));
+    await tester.pumpAndSettle();
+    expect(resetCalled, isTrue);
   });
 }

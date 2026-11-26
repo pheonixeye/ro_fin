@@ -5,6 +5,7 @@ import 'package:uuid/uuid.dart';
 import '../../core/models/category.dart';
 import '../../core/models/enums.dart';
 import '../../core/providers/app_providers.dart';
+import '../../core/services/reference_service.dart';
 import '../../core/theme/app_icons.dart';
 import '../../core/utils/l10n.dart';
 import '../../core/widgets/category_avatar.dart';
@@ -33,15 +34,74 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
     );
   }
 
+  Future<void> _toggleArchive(Category category) async {
+    final l10n = context.l10n;
+    final archiving = !category.archived;
+    await ref.read(categoriesRepositoryProvider).put(
+          category.copyWith(archived: archiving),
+        );
+    if (mounted) {
+      showAppSnack(
+        context,
+        archiving ? l10n.categoryArchived : l10n.categoryRestored,
+      );
+    }
+  }
+
+  Future<void> _delete(Category category) async {
+    final l10n = context.l10n;
+    if (category.isSystem) {
+      showAppSnack(context, l10n.systemCategoryHint);
+      return;
+    }
+    final counts = ReferenceService.forCategory(
+      categoryId: category.id,
+      transactions: ref.read(transactionsProvider).value ?? const [],
+      budgets: ref.read(budgetsProvider).value ?? const [],
+      recurring: ref.read(recurringProvider).value ?? const [],
+    );
+    if (counts.isUsed) {
+      final archive = await showConfirmDialog(
+        context,
+        title: l10n.deleteCategoryInUseTitle,
+        message: l10n.deleteCategoryInUseMessage(counts.total),
+        confirmLabel: l10n.archiveCategory,
+        destructive: false,
+      );
+      if (archive && mounted) {
+        await _toggleArchive(category);
+      }
+      return;
+    }
+    final confirmed = await showConfirmDialog(
+      context,
+      title: l10n.deleteCategoryTitle,
+      message: l10n.deleteCategoryMessage,
+      confirmLabel: l10n.delete,
+    );
+    if (!confirmed || !mounted) {
+      return;
+    }
+    await ref.read(categoriesRepositoryProvider).delete(category.id);
+    if (mounted) {
+      showAppSnack(context, l10n.categoryDeleted);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final locale = context.localeCode;
-    final theme = Theme.of(context);
     final categories = ref.watch(sortedCategoriesProvider);
+    final allCategories =
+        ref.watch(categoriesProvider).value ?? const <Category>[];
     final filtered = categories
         .where((category) => category.kind == _kind)
         .toList(growable: false);
+    final archived = allCategories
+        .where((category) => category.archived && category.kind == _kind)
+        .toList(growable: false)
+      ..sort((a, b) => a.sortOrder.compareTo(b.sortOrder));
 
     return Scaffold(
       appBar: AppBar(
@@ -77,7 +137,7 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
             ),
           ),
           Expanded(
-            child: filtered.isEmpty
+            child: filtered.isEmpty && archived.isEmpty
                 ? EmptyState(
                     icon: Icons.category_outlined,
                     title: l10n.noCategories,
@@ -85,73 +145,36 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
                     actionLabel: l10n.addCategory,
                     onAction: () => _openEditor(),
                   )
-                : ListView.separated(
+                : ListView(
                     padding: const EdgeInsets.fromLTRB(20, 0, 20, 28),
-                    itemCount: filtered.length,
-                    separatorBuilder: (_, _) => const SizedBox(height: 8),
-                    itemBuilder: (context, index) {
-                      final category = filtered[index];
-                      return Card(
-                        child: InkWell(
-                          borderRadius: BorderRadius.circular(22),
-                          onTap: () => _openEditor(category: category),
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
-                            child: Row(
-                              children: <Widget>[
-                                CategoryAvatar(
-                                  iconKey: category.iconKey,
-                                  colorValue: category.color,
-                                ),
-                                const SizedBox(width: 12),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Row(
-                                        children: <Widget>[
-                                          Flexible(
-                                            child: Text(
-                                              category.localizedName(locale),
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                              style:
-                                                  theme.textTheme.titleSmall,
-                                            ),
-                                          ),
-                                          if (category.isSystem) ...<Widget>[
-                                            const SizedBox(width: 8),
-                                            TypeBadge(
-                                              label: l10n.systemCategory,
-                                              color: theme
-                                                  .colorScheme.onSurfaceVariant,
-                                            ),
-                                          ],
-                                        ],
-                                      ),
-                                      const SizedBox(height: 3),
-                                      Text(
-                                        _scopeLabel(l10n, category.scope),
-                                        style: theme.textTheme.labelSmall
-                                            ?.copyWith(
-                                          color: theme
-                                              .colorScheme.onSurfaceVariant,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Icon(
-                                  Icons.chevron_right,
-                                  color: theme.colorScheme.onSurfaceVariant,
-                                ),
-                              ],
-                            ),
-                          ),
+                    children: <Widget>[
+                      for (final category in filtered) ...<Widget>[
+                        _CategoryTile(
+                          category: category,
+                          locale: locale,
+                          scopeLabel: _scopeLabel(l10n, category.scope),
+                          onEdit: () => _openEditor(category: category),
+                          onArchive: () => _toggleArchive(category),
+                          onDelete: () => _delete(category),
                         ),
-                      );
-                    },
+                        const SizedBox(height: 8),
+                      ],
+                      if (archived.isNotEmpty) ...<Widget>[
+                        const SizedBox(height: 14),
+                        SectionTitle(title: l10n.archived),
+                        for (final category in archived) ...<Widget>[
+                          _CategoryTile(
+                            category: category,
+                            locale: locale,
+                            scopeLabel: _scopeLabel(l10n, category.scope),
+                            onEdit: () => _openEditor(category: category),
+                            onArchive: () => _toggleArchive(category),
+                            onDelete: () => _delete(category),
+                          ),
+                          const SizedBox(height: 8),
+                        ],
+                      ],
+                    ],
                   ),
           ),
         ],
@@ -165,6 +188,149 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
       CategoryScope.business => l10n.scopeBusiness,
       CategoryScope.both => l10n.scopeBoth,
     };
+  }
+}
+
+class _CategoryTile extends StatelessWidget {
+  const _CategoryTile({
+    required this.category,
+    required this.locale,
+    required this.scopeLabel,
+    required this.onEdit,
+    required this.onArchive,
+    required this.onDelete,
+  });
+
+  final Category category;
+  final String locale;
+  final String scopeLabel;
+  final VoidCallback onEdit;
+  final VoidCallback onArchive;
+  final VoidCallback onDelete;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final theme = Theme.of(context);
+    return Card(
+      child: InkWell(
+        borderRadius: BorderRadius.circular(22),
+        onTap: onEdit,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(14, 12, 4, 12),
+          child: Row(
+            children: <Widget>[
+              CategoryAvatar(
+                iconKey: category.iconKey,
+                colorValue: category.color,
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        Flexible(
+                          child: Text(
+                            category.localizedName(locale),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: theme.textTheme.titleSmall,
+                          ),
+                        ),
+                        if (category.isSystem) ...<Widget>[
+                          const SizedBox(width: 8),
+                          TypeBadge(
+                            label: l10n.systemCategory,
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                        ],
+                        if (category.archived) ...<Widget>[
+                          const SizedBox(width: 6),
+                          TypeBadge(
+                            label: l10n.archived,
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                        ],
+                      ],
+                    ),
+                    const SizedBox(height: 3),
+                    Text(
+                      scopeLabel,
+                      style: theme.textTheme.labelSmall?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              PopupMenuButton<String>(
+                tooltip: l10n.edit,
+                icon: Icon(
+                  Icons.more_vert,
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
+                onSelected: (value) {
+                  switch (value) {
+                    case 'edit':
+                      onEdit();
+                      break;
+                    case 'archive':
+                      onArchive();
+                      break;
+                    case 'delete':
+                      onDelete();
+                      break;
+                  }
+                },
+                itemBuilder: (context) => <PopupMenuEntry<String>>[
+                  PopupMenuItem<String>(
+                    value: 'edit',
+                    child: ListTile(
+                      leading: const Icon(Icons.edit_outlined),
+                      title: Text(l10n.edit),
+                      contentPadding: EdgeInsets.zero,
+                    ),
+                  ),
+                  PopupMenuItem<String>(
+                    value: 'archive',
+                    child: ListTile(
+                      leading: Icon(
+                        category.archived
+                            ? Icons.unarchive_outlined
+                            : Icons.archive_outlined,
+                      ),
+                      title: Text(
+                        category.archived
+                            ? l10n.unarchiveCategory
+                            : l10n.archiveCategory,
+                      ),
+                      contentPadding: EdgeInsets.zero,
+                    ),
+                  ),
+                  if (!category.isSystem)
+                    PopupMenuItem<String>(
+                      value: 'delete',
+                      child: ListTile(
+                        leading: Icon(
+                          Icons.delete_outline,
+                          color: theme.colorScheme.error,
+                        ),
+                        title: Text(
+                          l10n.delete,
+                          style: TextStyle(color: theme.colorScheme.error),
+                        ),
+                        contentPadding: EdgeInsets.zero,
+                      ),
+                    ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
 
@@ -274,6 +440,33 @@ class _CategoryEditorSheetState extends ConsumerState<_CategoryEditorSheet> {
       return;
     }
     final l10n = context.l10n;
+    final counts = ReferenceService.forCategory(
+      categoryId: existing.id,
+      transactions: ref.read(transactionsProvider).value ?? const [],
+      budgets: ref.read(budgetsProvider).value ?? const [],
+      recurring: ref.read(recurringProvider).value ?? const [],
+    );
+    if (counts.isUsed) {
+      final archive = await showConfirmDialog(
+        context,
+        title: l10n.deleteCategoryInUseTitle,
+        message: l10n.deleteCategoryInUseMessage(counts.total),
+        confirmLabel: l10n.archiveCategory,
+        destructive: false,
+      );
+      if (!archive || !mounted) {
+        return;
+      }
+      await ref.read(categoriesRepositoryProvider).put(
+            existing.copyWith(archived: true),
+          );
+      if (!mounted) {
+        return;
+      }
+      showAppSnack(context, l10n.categoryArchived);
+      Navigator.of(context).pop();
+      return;
+    }
     final confirmed = await showConfirmDialog(
       context,
       title: l10n.deleteCategoryTitle,

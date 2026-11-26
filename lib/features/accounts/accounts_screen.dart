@@ -6,6 +6,7 @@ import '../../core/models/account.dart';
 import '../../core/models/enums.dart';
 import '../../core/providers/app_providers.dart';
 import '../../core/services/finance_service.dart';
+import '../../core/services/reference_service.dart';
 import '../../core/utils/l10n.dart';
 import '../../core/widgets/category_avatar.dart';
 import '../../core/widgets/common.dart';
@@ -126,6 +127,8 @@ class _AccountCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
     final theme = Theme.of(context);
+    final transactions = ref.watch(transactionsProvider).value ?? const [];
+    final recurring = ref.watch(recurringProvider).value ?? const [];
 
     return Card(
       child: InkWell(
@@ -199,6 +202,34 @@ class _AccountCard extends ConsumerWidget {
                           );
                       break;
                     case 'delete':
+                      final counts = ReferenceService.forAccount(
+                        accountId: account.id,
+                        transactions: transactions,
+                        recurring: recurring,
+                      );
+                      if (!account.archived && counts.isUsed) {
+                        final archive = await showConfirmDialog(
+                          context,
+                          title: l10n.deleteAccountInUseTitle,
+                          message: l10n.deleteAccountInUseMessage(
+                            counts.total,
+                          ),
+                          confirmLabel: l10n.archiveAccount,
+                          destructive: false,
+                        );
+                        if (archive) {
+                          await ref.read(accountsRepositoryProvider).put(
+                                account.copyWith(
+                                  archived: true,
+                                  updatedAt: DateTime.now(),
+                                ),
+                              );
+                          if (context.mounted) {
+                            showAppSnack(context, l10n.accountArchived);
+                          }
+                        }
+                        break;
+                      }
                       final confirmed = await showConfirmDialog(
                         context,
                         title: l10n.deleteAccountTitle,

@@ -1115,4 +1115,96 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get backToDashboard => 'العودة للرئيسية';
+
+  @override
+  String get archiveSpace => 'أرشفة المساحة';
+
+  @override
+  String get unarchiveSpace => 'استعادة المساحة';
+
+  @override
+  String get spaceArchived => 'تمت أرشفة المساحة';
+
+  @override
+  String get spaceRestored => 'تمت استعادة المساحة';
+
+  @override
+  String get deleteSpaceTitle => 'حذف المساحة؟';
+
+  @override
+  String get deleteSpaceMessage =>
+      'ستُحذف المساحة. ستحتفظ المعاملات والميزانيات والقواعد المتكررة داخلها بسجلها لكنها لن تنتمي إلى مساحة. فكّر في الأرشفة بدلاً من ذلك.';
+
+  @override
+  String get spaceDeleted => 'تم حذف المساحة';
+
+  @override
+  String get spaceInUseTitle => 'المساحة قيد الاستخدام';
+
+  @override
+  String spaceInUseMessage(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          '$count سجلات تستخدم هذه المساحة. أرشفها بدلاً من ذلك للحفاظ على سجلك.',
+      one: 'سجل واحد يستخدم هذه المساحة. أرشفها بدلاً من ذلك للحفاظ على سجلك.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get lastSpaceRequired => 'يجب الإبقاء على مساحة نشطة واحدة على الأقل.';
+
+  @override
+  String get spaceSystemProtected =>
+      'يمكن أرشفة المساحات المدمجة لكن لا يمكن حذفها.';
+
+  @override
+  String get archiveCategory => 'أرشفة الفئة';
+
+  @override
+  String get unarchiveCategory => 'استعادة الفئة';
+
+  @override
+  String get categoryArchived => 'تمت أرشفة الفئة';
+
+  @override
+  String get categoryRestored => 'تمت استعادة الفئة';
+
+  @override
+  String get deleteCategoryInUseTitle => 'الفئة قيد الاستخدام';
+
+  @override
+  String deleteCategoryInUseMessage(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          '$count سجلات تستخدم هذه الفئة. أرشفها بدلاً من ذلك ليبقى سجلك مصنفاً.',
+      one: 'سجل واحد يستخدم هذه الفئة. أرشفها بدلاً من ذلك ليبقى سجلك مصنفاً.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get accountArchived => 'تمت أرشفة الحساب';
+
+  @override
+  String get deleteAccountInUseTitle => 'الحساب قيد الاستخدام';
+
+  @override
+  String deleteAccountInUseMessage(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          '$count سجلات تستخدم هذا الحساب. أرشفه بدلاً من ذلك للحفاظ على سجلك.',
+      one: 'سجل واحد يستخدم هذا الحساب. أرشفه بدلاً من ذلك للحفاظ على سجلك.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get licenses => 'تراخيص المصادر المفتوحة';
 }
